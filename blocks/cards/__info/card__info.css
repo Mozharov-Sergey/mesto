@@ -1,0 +1,6 @@
+.card__info {
+  max-width: 246px;
+  display: flex;
+  flex-direction: row;
+  margin: 25px 15px 31px 21px;
+}

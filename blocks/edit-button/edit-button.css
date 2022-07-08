@@ -1,0 +1,16 @@
+.edit-button {
+  padding: 37px 18px 0 18px;
+  align-self: flex-start;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.edit-button:hover {
+ opacity: 0.6;
+}
+
+@media (max-width: 515px) {
+  .edit-button {
+    align-self: flex-end;
+  }
+}

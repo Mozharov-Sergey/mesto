@@ -3,6 +3,8 @@
   align-self: flex-start;
   cursor: pointer;
   transition: 0.2s;
+  background: transparent;
+  border:none;
 }
 
 .edit-button:hover {

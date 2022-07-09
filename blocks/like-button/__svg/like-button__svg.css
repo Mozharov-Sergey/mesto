@@ -1,0 +1,11 @@
+.like-button__svg {
+  background-image: url("../../../images/like.svg");
+  width: 22px;
+  height: 19px;
+  transition: 0.2s;
+}
+
+.like-button__svg:hover {
+  opacity: 0.5;
+}
+

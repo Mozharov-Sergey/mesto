@@ -1,18 +1,25 @@
 .edit-button {
-  padding: 37px 18px 0 18px;
+  padding: 16px 0 0 19px;
   align-self: flex-start;
   cursor: pointer;
   transition: 0.2s;
   background: transparent;
-  border:none;
+  border: none;
 }
 
 .edit-button:hover {
- opacity: 0.6;
+  opacity: 0.6;
 }
 
 @media (max-width: 515px) {
   .edit-button {
-    align-self: flex-end;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+}
+@media (max-width: 515px) {
+  .edit-button-svg {
+    width: 18px;
+    height: 18px;
   }
 }

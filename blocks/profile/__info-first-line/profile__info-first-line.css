@@ -1,0 +1,11 @@
+.profile__info-first-line {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .profile__info-first-line {
+    padding-left: 30px;
+  }
+}

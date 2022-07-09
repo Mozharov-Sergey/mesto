@@ -7,9 +7,13 @@
   transition: 0.2s;
   fill: white;
   cursor: pointer;
+  background-image: url(../../../images/CloseIcon.svg);
+  background-repeat: no-repeat;
+  width: 33px;
+  height: 33px;
 }
 
-.popup__close-svg {}
+
 
 .popup__close:hover {
   opacity: 0.6;
@@ -17,13 +21,14 @@
 
 @media (max-width: 515px) {
   .popup__close {
-    right: -5px;
+    right: 0;
     top: -38px;
   }
 }
 
 @media (max-width: 515px) {
-  .popup__close-svg {
+  .popup__close {
+    background-size: cover;
     width: 20px;
     height: 20px;
   }

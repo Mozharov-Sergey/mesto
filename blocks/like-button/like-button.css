@@ -1,20 +1,7 @@
 .like-button {
   border: none;
-  background-color: #fff;
+  background: transparent;
   margin: 5px 5px 0 auto;
   padding: 0;
   cursor: pointer;
 }
-
-.like-button__like-icon {
-  transition: 0.3s;
- 
-}
-
-.like-button:hover .like-button__like-icon {
-  opacity: 0.5;
-}
-
-/* .like-button:active .like-button__like-icon {
-  background-color: black;
-} */

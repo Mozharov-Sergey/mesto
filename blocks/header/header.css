@@ -5,12 +5,8 @@
   padding: 0;
 }
 
-
-
 @media (max-width: 515px) {
   .header {
     min-height: 84px;
-
   }
 }
-

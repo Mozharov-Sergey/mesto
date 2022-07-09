@@ -32,7 +32,6 @@ function likeToggler(event) {
     target.classList.toggle("like-button_active");
     console.log(2);
   }
-  
 }
 
 editButton.addEventListener("click", editProfileOpen);

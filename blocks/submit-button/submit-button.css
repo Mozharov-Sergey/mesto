@@ -15,7 +15,6 @@
   cursor: pointer;
 }
 
-
 @media (max-width: 515px) {
   .submit-button {
     font-weight: 400;

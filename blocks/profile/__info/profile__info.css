@@ -2,8 +2,10 @@
 
 }
 
-@media (max-width: 515px) {
+@media (max-width: 768px) {
   .profile__info {
-    text-align: center;   
+    text-align: center;
+    padding-top: 23px ;
+    padding-bottom: 36px;
   }
 }

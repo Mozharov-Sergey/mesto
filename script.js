@@ -26,10 +26,13 @@ function formSubmitHandler(evt) {
 }
 
 function likeToggler(event) {
+  console.log(1);
   target = event.target;
-  if (target.classList.contains("like-button__svg")) {
-    target.classList.toggle("like-button__svg_active");
+  if (target.classList.contains("like-button")) {
+    target.classList.toggle("like-button_active");
+    console.log(2);
   }
+  
 }
 
 editButton.addEventListener("click", editProfileOpen);

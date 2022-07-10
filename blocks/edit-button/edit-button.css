@@ -17,9 +17,4 @@
     padding-top: 10px;
   }
 }
-@media (max-width: 515px) {
-  .edit-button-svg {
-    width: 18px;
-    height: 18px;
-  }
-}
+

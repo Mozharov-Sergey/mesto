@@ -4,10 +4,7 @@
   margin: 0 0 39px 0;
   width: 100%;
   padding: 0;
-}
-
-.popup__field::-webkit-input-placeholder {
-  font-family: 'Inter', 'Arial', sans-serif;
+  font-family: "Inter", "Arial", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;

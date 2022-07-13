@@ -12,8 +12,8 @@ let profileProfession = document.querySelector(".profile__profession");
 
 function editProfileOpen() {
   popup.classList.add("popup_opened");
-  newUserName.value = profileName.innerText;
-  newUserProfession.value = profileProfession.innerText;
+  newUserName.value = profileName.textContent;
+  newUserProfession.value = profileProfession.textContent;
 }
 
 function editProfileClose() {

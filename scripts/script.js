@@ -33,7 +33,7 @@ const initialCards = [
 let popupEditProfile = document.querySelector('.popup_type_edit-profile');
 let popupAddCard = document.querySelector('.popup_type_add-card');
 let addCardButton = document.querySelector('.profile__add-button');
-let addCardForm = document.querySelector('.popup_type_add-card-form');
+let addCardForm = document.querySelector('.popup__form_type_add-card-form');
 let closeButton = document.querySelector('.popup__close');
 let editProfileForm = document.querySelector('.popup__form');
 

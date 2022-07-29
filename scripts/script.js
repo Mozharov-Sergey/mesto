@@ -27,51 +27,48 @@ const editButton = document.querySelector('.profile__edit-button');
 const profileName = document.querySelector('.profile__name');
 const profileProfession = document.querySelector('.profile__profession');
 
-function editProfileOpen() {
-  popupEditProfile.classList.add('popup_opened');
-  newUserName.value = profileName.textContent;
-  newUserProfession.value = profileProfession.textContent;
-}
-
-function editProfileClose() {
-  popupEditProfile.classList.remove('popup_opened');
-}
-
 function editProfileSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = newUserName.value;
   profileProfession.textContent = newUserProfession.value;
-  editProfileClose();
+  closeModalWindow(popupEditProfile);
 }
 
 // CARDS
 function cardsInitialization() {
-  initialCards.forEach(function (item) {
-    newCard = cardsTemplate.querySelector('.cards__card').cloneNode(true); // ПРОВЕРИТЬ!!!!!!!!!!!!!!!!!!!!!!
-    newCard.querySelector('.cards__card-image').src = item.link;
-    newCard.querySelector('.cards__card-image').alt = item.name;
-    newCard.querySelector('.cards__card-title').textContent = item.name;
-    cards.append(newCard);
+  initialCards.forEach((item) =>
+    renderCard(createCard(item.link, item.name), cards)
+  );
+  cards.addEventListener('click', likeToggler);
+  cards.addEventListener('click', cardDelete);
+  cards.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    target = evt.target;
+    openModalWindow(popupCardImage, target);
   });
 }
 
-function addCardOpen() {
-  popupAddCard.classList.add('popup_opened');
+// CARDS FUNCTIONS
+function createCard(link, description) {
+  let newCard = cardsTemplate.cloneNode(true);
+  newCard.querySelector('.cards__card-image').src = link;
+  newCard.querySelector('.cards__card-image').alt = description;
+  newCard.querySelector('.cards__card-title').textContent = description;
+  return newCard;
 }
 
-function addCardSubmit(evt) {
-  evt.preventDefault();
-  newCard = cardsTemplate.cloneNode(true);
-  newCard.querySelector('.cards__card-image').src = newCardLink.value;
-  newCard.querySelector('.cards__card-image').alt = newCardDescription.value;
-  newCard.querySelector('.cards__card-title').textContent =
-    newCardDescription.value;
-  cards.append(newCard);
-  addCardClose();
+function renderCard(newCard, container) {
+  container.append(newCard);
 }
 
-function addCardClose() {
-  popupAddCard.classList.remove('popup_opened');
+function submitNewCard(newCardLink, newCardDescription, container) {
+  renderCard(
+    createCard(newCardLink.value, newCardDescription.value),
+    container
+  );
+  closeModalWindow(
+    newCardLink.parentElement.parentElement.parentElement.parentElement
+  );
 }
 
 function cardDelete(evt) {
@@ -89,33 +86,56 @@ function likeToggler(evt) {
   }
 }
 
-function cardImageOpen(evt) {
-  target = evt.target;
-  if (target.classList.contains('cards__card-image')) {
-    popupCardImage.classList.add('popup_opened');
+// MODAL WINDOWS
+function openModalWindow(modalWindow) {
+  if (!target.classList.contains('cards__card-image')) {
+    return;
+    // Не смотря на условие target.classList.contains('cards__card-image')
+    // открытие карточки срабатывает при нажатии кнопки удаления карточки или лайка.
+    //Первое условие if(!...)призвано что бы этого избежать.
+    // Подозреваю, что это не самое изящное решение, а верное кроется где то в области работы с событими,
+    // но за 8 часов поисков
+    // лучшего не нашел (((
+  } else if (target.classList.contains('cards__card-image')) {
+    popupCardImage.querySelector('.popup__image').src = target.src;
+    popupCardImage.querySelector('.popup__image').alt = target.alt;
+    popupCardImage.querySelector('.popup__image-subtitle').textContent =
+      target.alt;
   }
-
-  popupCardImage.querySelector('.popup__image').src = target.src;
-  popupCardImage.querySelector('.popup__image').alt = target.alt;
-  popupCardImage.querySelector('.popup__image-subtitle').textContent =
-    target.alt;
+  modalWindow.classList.add('popup_opened');
 }
 
-function cardImageClose() {
-  popupCardImage.classList.remove('popup_opened');
+function closeModalWindow(modalWindow) {
+  modalWindow.classList.remove('popup_opened');
 }
 
 cardsInitialization();
 
-//EDIT PROFILE
-editButton.addEventListener('click', editProfileOpen);
-editProfileCloseButton.addEventListener('click', editProfileClose);
+//PROFILE
+editButton.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  target = evt.target;
+  openModalWindow(popupEditProfile);
+});
 editProfileForm.addEventListener('submit', editProfileSubmit);
-// CARDS
-addCardButton.addEventListener('click', addCardOpen);
-addCardForm.addEventListener('submit', addCardSubmit);
-newCardClose.addEventListener('click', addCardClose);
-cards.addEventListener('click', likeToggler);
-cards.addEventListener('click', cardDelete);
-cards.addEventListener('click', cardImageOpen);
-popupCardImageClose.addEventListener('click', cardImageClose);
+
+//CARD
+addCardForm.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+  submitNewCard(newCardLink, newCardDescription, cards);
+});
+
+addCardButton.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  target = evt.target;
+  openModalWindow(popupAddCard);
+});
+
+//CLOSE
+newCardClose.addEventListener('click', () => closeModalWindow(popupAddCard));
+editProfileCloseButton.addEventListener('click', () =>
+  closeModalWindow(popupEditProfile)
+);
+popupCardImageClose.addEventListener('click', () =>
+  closeModalWindow(popupCardImage)
+);

@@ -57,6 +57,7 @@
           <input class="popup__field popup__field_value_name" type="text" placeholder="Имя" name="profileName" required>
           <input class="popup__field popup__field_value_profession" type="text" placeholder="Род деятельности"
             name="profileFunction" required>
+            <!-- Полагаю, в правке речь все таки шла о создании карточки и загрузке картинки. Правка релизована на 76 строке. -->
         </fieldset>
         <button class="popup__submit-button" type="submit" aria-label="Сохранить">Сохранить</button>
         <button class="popup__close" type="button" aria-label="Закрыть"></button>
@@ -72,7 +73,7 @@
         <fieldset class="popup__fieldset">
           <input class="popup__field popup__field_value_description" type="text" placeholder="Название"
             name="newCardDescription" required>
-          <input class="popup__field popup__field_value_link" type="text" placeholder="Ссылка на картинку"
+          <input class="popup__field popup__field_value_link" type="url" placeholder="Ссылка на картинку"
             name="newCardLink" required>
         </fieldset>
         <button class="popup__submit-button" type="submit" aria-label="Сохранить">Сохранить</button>
@@ -102,7 +103,7 @@
     </div>
   </div>
 
-
+  <script src="./scripts/constants.js"></script>
   <script src="./scripts/script.js"></script>
 </body>
 

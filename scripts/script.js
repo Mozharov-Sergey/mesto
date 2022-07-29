@@ -1,60 +1,31 @@
-// CARDS VARIABLES
-let cards = document.querySelector('.cards');
-let cardsTemplate = document.querySelector('#cards__card').content;
-
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-  },
-];
-
 // POPUP VRIABLES
-let popupEditProfile = document.querySelector('.popup_type_edit-profile');
-let popupAddCard = document.querySelector('.popup_type_add-card');
-let addCardButton = document.querySelector('.profile__add-button');
-let addCardForm = document.querySelector('.popup__form_type_add-card-form');
-let closeButton = document.querySelector('.popup__close');
-let editProfileForm = document.querySelector('.popup__form');
+const popupAddCard = document.querySelector('.popup_type_add-card');
+const addCardButton = document.querySelector('.profile__add-button');
+const addCardForm = document.querySelector('.popup__form_type_add-card-form');
 
-let newUserName = popupEditProfile.querySelector('.popup__field_value_name');
-let newUserProfession = popupEditProfile.querySelector(
+const popupEditProfile = document.querySelector('.popup_type_edit-profile');
+const editProfileCloseButton = document.querySelector('.popup__close');
+const editProfileForm = document.querySelector('.popup__form');
+const newUserName = popupEditProfile.querySelector('.popup__field_value_name');
+const newUserProfession = popupEditProfile.querySelector(
   '.popup__field_value_profession'
 );
 
 // CARDS VARIABLES
-let newCardDescription = popupAddCard.querySelector(
+const cards = document.querySelector('.cards');
+const cardsTemplate = document.querySelector('#cards__card').content;
+const newCardDescription = popupAddCard.querySelector(
   '.popup__field_value_description'
 );
-let newCardLink = popupAddCard.querySelector('.popup__field_value_link');
-let newCardClose = popupAddCard.querySelector('.popup__close');
-let popupCardImage = document.querySelector('.popup_type_open-image');
-let popupCardImageClose = popupCardImage.querySelector('.popup__close');
+const newCardLink = popupAddCard.querySelector('.popup__field_value_link');
+const newCardClose = popupAddCard.querySelector('.popup__close');
+const popupCardImage = document.querySelector('.popup_type_open-image');
+const popupCardImageClose = popupCardImage.querySelector('.popup__close');
 
 // PROFILE VARIABLES
-let editButton = document.querySelector('.profile__edit-button');
-let profileName = document.querySelector('.profile__name');
-let profileProfession = document.querySelector('.profile__profession');
+const editButton = document.querySelector('.profile__edit-button');
+const profileName = document.querySelector('.profile__name');
+const profileProfession = document.querySelector('.profile__profession');
 
 function editProfileOpen() {
   popupEditProfile.classList.add('popup_opened');
@@ -76,7 +47,7 @@ function editProfileSubmit(evt) {
 // CARDS
 function cardsInitialization() {
   initialCards.forEach(function (item) {
-    newCard = cardsTemplate.querySelector('.cards__card').cloneNode(true);
+    newCard = cardsTemplate.querySelector('.cards__card').cloneNode(true); // ПРОВЕРИТЬ!!!!!!!!!!!!!!!!!!!!!!
     newCard.querySelector('.cards__card-image').src = item.link;
     newCard.querySelector('.cards__card-image').alt = item.name;
     newCard.querySelector('.cards__card-title').textContent = item.name;
@@ -138,7 +109,7 @@ cardsInitialization();
 
 //EDIT PROFILE
 editButton.addEventListener('click', editProfileOpen);
-closeButton.addEventListener('click', editProfileClose);
+editProfileCloseButton.addEventListener('click', editProfileClose);
 editProfileForm.addEventListener('submit', editProfileSubmit);
 // CARDS
 addCardButton.addEventListener('click', addCardOpen);

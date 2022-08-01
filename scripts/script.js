@@ -65,7 +65,7 @@ function createCard(link, description) {
 }
 
 function renderCard(newCard, container) {
-  container.append(newCard);
+  container.prepend(newCard);
 }
 
 function submitNewCard(newCardLink, newCardDescription, container, evt) {
@@ -74,6 +74,7 @@ function submitNewCard(newCardLink, newCardDescription, container, evt) {
     createCard(newCardLink.value, newCardDescription.value),
     container
   );
+  addCardForm.reset();
   openClosePopupToggler(popupAddCard, evt);
 }
 
@@ -128,3 +129,4 @@ newCardClose.addEventListener('click', (evt) =>
 popupCardImageClose.addEventListener('click', (evt) =>
   openClosePopupToggler(popupCardImage, evt)
 );
+ 

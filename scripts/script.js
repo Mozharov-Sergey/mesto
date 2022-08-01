@@ -49,13 +49,6 @@ function createCard(link, description) {
   newCard.querySelector('.cards__card-image').alt = description;
   newCard.querySelector('.cards__card-title').textContent = description;
 
-  const popupPreview = document.querySelector('.popup_type_open-image');
-
-  popupPreview.querySelector('.popup__image').src = link;
-  popupPreview.querySelector('.popup__image').alt = description;
-  popupPreview.querySelector('.popup__image-subtitle').textContent =
-    description;
-
   newCard
     .querySelector('.cards__card-image')
     .addEventListener('click', (evt) => openPopup(popupCardImage, evt));

@@ -51,7 +51,14 @@ function createCard(link, description) {
 
   newCard
     .querySelector('.cards__card-image')
-    .addEventListener('click', (evt) => openPopup(popupCardImage, evt));
+    .addEventListener('click', function () {
+      const popupPreview = popupCardImage;
+      popupPreview.querySelector('.popup__image').src = link;
+      popupPreview.querySelector('.popup__image').alt = description;
+      popupPreview.querySelector('.popup__image-subtitle').textContent =
+        description;
+      openPopup(popupPreview);
+    });
 
   newCard
     .querySelector('.card__delete-button')
@@ -88,11 +95,6 @@ function likeToggler(evt) {
 
 function openPopup(popup, evt) {
   popup.classList.add('popup_opened');
-  if (popup.classList.contains('popup_type_open-image')) {
-    renderPopupPreview(evt);
-  } else if (popup.classList.contains('popup_type_edit-profile')) {
-    fillProfileForm();
-  }
 }
 
 function closePopup(popup) {
@@ -117,12 +119,18 @@ function fillProfileForm() {
 cardsInitialization();
 
 /** PROFILE */
-profileEditButton.addEventListener('click', function (evt) {
-  openPopup(popupEditProfile, evt);
+
+profileEditButton.addEventListener('click', function () {
+  popupEditProfile.querySelector('.popup__field_value_name').value =
+    profileName.textContent;
+  popupEditProfile.querySelector('.popup__field_value_profession').value =
+    profileProfession.textContent;
+  openPopup(popupEditProfile);
 });
+
 editProfileForm.addEventListener('submit', editProfileSubmit);
 
-editProfileCloseButton.addEventListener('click', (evt) =>
+editProfileCloseButton.addEventListener('click', () =>
   closePopup(popupEditProfile)
 );
 
@@ -131,13 +139,11 @@ addCardForm.addEventListener('submit', function (evt) {
   submitNewCard(newCardLink, newCardDescription, cards, evt);
 });
 
-addCardButton.addEventListener('click', function (evt) {
-  openPopup(popupAddCard, evt);
+addCardButton.addEventListener('click', function () {
+  openPopup(popupAddCard);
 });
 
-newCardClose.addEventListener('click', (evt) => closePopup(popupAddCard));
+newCardClose.addEventListener('click', () => closePopup(popupAddCard));
 
 /** IMAGE */
-popupCardImageClose.addEventListener('click', (evt) =>
-  closePopup(popupCardImage)
-);
+popupCardImageClose.addEventListener('click', () => closePopup(popupCardImage));

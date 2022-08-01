@@ -101,21 +101,6 @@ function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
-function renderPopupPreview(evt) {
-  const target = evt.target;
-  popupCardImage.querySelector('.popup__image').src = target.src;
-  popupCardImage.querySelector('.popup__image').alt = target.alt;
-  popupCardImage.querySelector('.popup__image-subtitle').textContent =
-    target.alt;
-}
-
-function fillProfileForm() {
-  popupEditProfile.querySelector('.popup__field_value_name').value =
-    profileName.textContent;
-  popupEditProfile.querySelector('.popup__field_value_profession').value =
-    profileProfession.textContent;
-}
-
 cardsInitialization();
 
 /** PROFILE */

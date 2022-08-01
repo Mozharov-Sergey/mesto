@@ -124,9 +124,7 @@ addCardForm.addEventListener('submit', function (evt) {
   submitNewCard(newCardLink, newCardDescription, cards, evt);
 });
 
-addCardButton.addEventListener('click', function () {
-  openPopup(popupAddCard);
-});
+addCardButton.addEventListener('click', () => openPopup(popupAddCard));
 
 newCardClose.addEventListener('click', () => closePopup(popupAddCard));
 

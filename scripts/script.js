@@ -32,7 +32,7 @@ function editProfileSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = newUserName.value;
   profileProfession.textContent = newUserProfession.value;
-  openClosePopupToggler(popupEditProfile, evt);
+  closePopup(popupEditProfile);
 }
 
 /** CARDS */
@@ -51,9 +51,7 @@ function createCard(link, description) {
 
   newCard
     .querySelector('.cards__card-image')
-    .addEventListener('click', (evt) =>
-      openClosePopupToggler(popupCardImage, evt)
-    );
+    .addEventListener('click', (evt) => openPopup(popupCardImage, evt));
 
   newCard
     .querySelector('.card__delete-button')
@@ -75,7 +73,7 @@ function submitNewCard(newCardLink, newCardDescription, container, evt) {
     container
   );
   addCardForm.reset();
-  openClosePopupToggler(popupAddCard, evt);
+  closePopup(popupAddCard);
 }
 
 function cardDelete(evt) {
@@ -88,28 +86,44 @@ function likeToggler(evt) {
   target.classList.toggle('cards__like-button_active');
 }
 
-function openClosePopupToggler(popup, evt) {
-  popup.classList.toggle('popup_opened');
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+}
 
+function openPopup(popup, evt) {
+  popup.classList.toggle('popup_opened');
   if (popup.classList.contains('popup_type_open-image')) {
-    const target = evt.target;
-    popupCardImage.querySelector('.popup__image').src = target.src;
-    popupCardImage.querySelector('.popup__image').alt = target.alt;
-    popupCardImage.querySelector('.popup__image-subtitle').textContent =
-      target.alt;
+    renderPopupPreview(evt);
+  } else if (popup.classList.contains('popup_type_edit-profile')) {
+    fillProfileForm();
   }
+}
+
+function renderPopupPreview(evt) {
+  const target = evt.target;
+  popupCardImage.querySelector('.popup__image').src = target.src;
+  popupCardImage.querySelector('.popup__image').alt = target.alt;
+  popupCardImage.querySelector('.popup__image-subtitle').textContent =
+    target.alt;
+}
+
+function fillProfileForm() {
+  popupEditProfile.querySelector('.popup__field_value_name').value =
+    profileName.textContent;
+  popupEditProfile.querySelector('.popup__field_value_profession').value =
+    profileProfession.textContent;
 }
 
 cardsInitialization();
 
 /** PROFILE */
 profileEditButton.addEventListener('click', function (evt) {
-  openClosePopupToggler(popupEditProfile, evt);
+  openPopup(popupEditProfile, evt);
 });
 editProfileForm.addEventListener('submit', editProfileSubmit);
 
 editProfileCloseButton.addEventListener('click', (evt) =>
-  openClosePopupToggler(popupEditProfile, evt)
+  closePopup(popupEditProfile)
 );
 
 /** CARD */
@@ -118,15 +132,12 @@ addCardForm.addEventListener('submit', function (evt) {
 });
 
 addCardButton.addEventListener('click', function (evt) {
-  openClosePopupToggler(popupAddCard, evt);
+  openPopup(popupAddCard, evt);
 });
 
-newCardClose.addEventListener('click', (evt) =>
-  openClosePopupToggler(popupAddCard, evt)
-);
+newCardClose.addEventListener('click', (evt) => closePopup(popupAddCard));
 
 /** IMAGE */
 popupCardImageClose.addEventListener('click', (evt) =>
-  openClosePopupToggler(popupCardImage, evt)
+  closePopup(popupCardImage)
 );
- 

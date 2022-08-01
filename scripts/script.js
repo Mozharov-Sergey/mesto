@@ -49,6 +49,13 @@ function createCard(link, description) {
   newCard.querySelector('.cards__card-image').alt = description;
   newCard.querySelector('.cards__card-title').textContent = description;
 
+  const popupPreview = document.querySelector('.popup_type_open-image');
+
+  popupPreview.querySelector('.popup__image').src = link;
+  popupPreview.querySelector('.popup__image').alt = description;
+  popupPreview.querySelector('.popup__image-subtitle').textContent =
+    description;
+
   newCard
     .querySelector('.cards__card-image')
     .addEventListener('click', (evt) => openPopup(popupCardImage, evt));
@@ -86,17 +93,17 @@ function likeToggler(evt) {
   target.classList.toggle('cards__like-button_active');
 }
 
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-}
-
 function openPopup(popup, evt) {
-  popup.classList.toggle('popup_opened');
+  popup.classList.add('popup_opened');
   if (popup.classList.contains('popup_type_open-image')) {
     renderPopupPreview(evt);
   } else if (popup.classList.contains('popup_type_edit-profile')) {
     fillProfileForm();
   }
+}
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
 }
 
 function renderPopupPreview(evt) {

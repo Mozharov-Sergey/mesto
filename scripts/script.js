@@ -93,8 +93,25 @@ function likeToggler(evt) {
   target.classList.toggle('cards__like-button_active');
 }
 
-function openPopup(popup, evt) {
+function setClosePopupListeners(popup){
+  const popupOverlay = popup;
+
+  popupOverlay.addEventListener('click', function(evt){
+    if(evt.target.classList.contains('popup')){
+      closePopup(popup);
+    }
+  });
+
+  document.addEventListener('keydown',(evt) => {
+    if(evt.key === 'Escape'){
+      closePopup(popup);
+    }
+  })
+}
+
+function openPopup(popup) {
   popup.classList.add('popup_opened');
+  setClosePopupListeners(popup);
 }
 
 function closePopup(popup) {
@@ -102,6 +119,10 @@ function closePopup(popup) {
 }
 
 cardsInitialization();
+
+
+
+
 
 /** PROFILE */
 

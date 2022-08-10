@@ -18,6 +18,16 @@ function enableValidation(config) {
   });
 }
 
+
+function isValid(form, inputElement) {
+  if (!inputElement.validity.valid) {
+    showInputError(form, inputElement, inputElement.validationMessage);
+  } else {
+    hideInputError(form, inputElement);
+  }
+}
+
+
 function setEventListeners(form) {
   const inputList = Array.from(form.querySelectorAll(config.inputSelector));
   console.log(inputList);
@@ -32,13 +42,7 @@ function setEventListeners(form) {
   });
 }
 
-function isValid(form, inputElement) {
-  if (!inputElement.validity.valid) {
-    showInputError(form, inputElement, inputElement.validationMessage);
-  } else {
-    hideInputError(form, inputElement);
-  }
-}
+
 
 function showInputError(form, inputElement, validationMessage) {
   inputElement.classList.add('popup__field_type_error');
@@ -67,6 +71,4 @@ function checkInputValidity(inputList) {
   return formIsValid;
 }
 
-// enableValidation(config);
-
-// enableValidation(config);
+enableValidation(config);

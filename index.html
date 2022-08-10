@@ -54,10 +54,11 @@
       <form class="popup__form" name="popup-form" action="#" method="get" novalidate>
         <h2 class="popup__title">Редактировать профиль</h2>
         <fieldset class="popup__fieldset">
-          <input id="name" class="popup__field popup__field_value_name" type="text" placeholder="Имя" name="profileName" required>
+          <input id="name" class="popup__field popup__field_value_name" type="text" placeholder="Имя" name="profileName" minlength="2" maxlength="40" required>
+          <span class="name-input-error"></span>
           
           <input id="profession" class="popup__field popup__field_value_profession" type="text" placeholder="Род деятельности"
-            name="profileFunction" required>
+            name="profileFunction" minlength="2" maxlength="200" required>
             <span class="profession-input-error"></span>
         </fieldset>
         <button class="popup__submit-button" type="submit" aria-label="Сохранить" disabled>>Сохранить</button>
@@ -73,7 +74,7 @@
         <h2 class="popup__title">Новое место</h2>
         <fieldset class="popup__fieldset">
           <input id="description" class="popup__field popup__field_value_description" type="text" placeholder="Название"
-            name="newCardDescription" required>
+            name="newCardDescription" minlength="2" maxlength="30" required>
             <span class="description-input-error"></span>
           <input id="link" class="popup__field popup__field_value_link" type="url" placeholder="Ссылка на картинку"
             name="newCardLink" required>

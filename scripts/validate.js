@@ -12,7 +12,7 @@ function enableValidation(config) {
   formList.forEach((form) => {
     buttonStateControl(form);
     form.addEventListener('submit', (evt) => {
-      evt.preventDefault();
+
     });
     setEventListeners(form);
   });
@@ -45,7 +45,7 @@ function buttonStateControl(form) {
   switch (checkInputValidity(inputList)) {
     case true:
       buttonStateActive(submitButton);
-      submitButton.classList.add();
+
       break;
     case false:
       buttonStateDisabled(submitButton);
@@ -54,16 +54,16 @@ function buttonStateControl(form) {
 }
 
 function showInputError(form, inputElement, validationMessage) {
-  inputElement.classList.add('popup__field_type_error');
+  inputElement.classList.add(config.inputErrorClass);
   const errorElement = form.querySelector(`.${inputElement.id}-input-error`);
-  errorElement.classList.add('popup__error_visible');
+  errorElement.classList.add(config.errorClass);
   errorElement.textContent = validationMessage;
 }
 
 function hideInputError(form, inputElement) {
-  inputElement.classList.remove('popup__field_type_error');
+  inputElement.classList.remove(config.inputErrorClass);
   const errorElement = form.querySelector(`.${inputElement.id}-input-error`);
-  errorElement.classList.remove('popup__error_visible');
+  errorElement.classList.remove(config.errorClass);
   errorElement.textContent = '';
 }
 

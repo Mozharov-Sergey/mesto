@@ -48,8 +48,42 @@
     </div>
   </div>
 
+  <!-- POPUP EDIT PROFILE -->
+  <div class="popup popup_type_edit-profile">
+    <div class="popup__container">
+      <form class="popup__form" name="popup-form" action="#" method="get" novalidate>
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <fieldset class="popup__fieldset">
+          <input id="name" class="popup__field popup__field_value_name" type="text" placeholder="Имя" name="profileName" required>
+          
+          <input id="profession" class="popup__field popup__field_value_profession" type="text" placeholder="Род деятельности"
+            name="profileFunction" required>
+            <span class="profession-input-error"></span>
+        </fieldset>
+        <button class="popup__submit-button" type="submit" aria-label="Сохранить" disabled>>Сохранить</button>
+        <button class="popup__close" type="button" aria-label="Закрыть"></button>
+      </form>
+    </div>
+  </div>
 
-  
+  <!-- POPUP ADD CARD -->
+  <div class="popup popup_type_add-card">
+    <div class="popup__container">
+      <form class="popup__form popup__form_type_add-card-form" name="popup-form" action="#" method="get" novalidate>
+        <h2 class="popup__title">Новое место</h2>
+        <fieldset class="popup__fieldset">
+          <input id="description" class="popup__field popup__field_value_description" type="text" placeholder="Название"
+            name="newCardDescription" required>
+            <span class="description-input-error"></span>
+          <input id="link" class="popup__field popup__field_value_link" type="url" placeholder="Ссылка на картинку"
+            name="newCardLink" required>
+            <span class="link-input-error"></span>
+        </fieldset>
+        <button class="popup__submit-button" type="submit" aria-label="Сохранить" disabled>Сохранить</button>
+        <button class="popup__close" type="button" aria-label="Закрыть"></button>
+      </form>
+    </div>
+  </div>
 
   <!-- CARD TEMPLATE -->
   <template id="cards__card">
@@ -78,3 +112,4 @@
 </body>
 
 </html>
+

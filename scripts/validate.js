@@ -9,8 +9,8 @@ config = {
 
 function enableValidation(config) {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
-  console.log(formList);
   formList.forEach((form) => {
+    buttonStateControl(form);
     form.addEventListener('submit', (evt) => {
       evt.preventDefault();
     });
@@ -18,6 +18,17 @@ function enableValidation(config) {
   });
 }
 
+function setEventListeners(form) {
+  const inputList = Array.from(form.querySelectorAll(config.inputSelector));
+  
+  buttonStateControl(form);
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener('input', () => {
+      isValid(form, inputElement);
+      buttonStateControl(form);
+    });
+  });
+}
 
 function isValid(form, inputElement) {
   if (!inputElement.validity.valid) {
@@ -27,22 +38,20 @@ function isValid(form, inputElement) {
   }
 }
 
-
-function setEventListeners(form) {
+function buttonStateControl(form) {
   const inputList = Array.from(form.querySelectorAll(config.inputSelector));
-  console.log(inputList);
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', () => {
-      isValid(form, inputElement);
-      if (checkInputValidity(inputList)) {
-        const submitButton = form.querySelector(config.submitButtonSelector);
-        toggleButtonState(submitButton);
-      }
-    });
-  });
+  const submitButton = form.querySelector(config.submitButtonSelector);
+
+  switch (checkInputValidity(inputList)) {
+    case true:
+      buttonStateActive(submitButton);
+      submitButton.classList.add();
+      break;
+    case false:
+      buttonStateDisabled(submitButton);
+      break;
+  }
 }
-
-
 
 function showInputError(form, inputElement, validationMessage) {
   inputElement.classList.add('popup__field_type_error');
@@ -58,12 +67,14 @@ function hideInputError(form, inputElement) {
   errorElement.textContent = '';
 }
 
-function hasInvalidInput() {}
+function buttonStateActive(button) {
+  button.removeAttribute('disabled');
+  button.classList.remove(config.inactiveButtonClass);
+}
 
-function toggleButtonState(button) {
-  if (button.hasAttribute('disabled')) {
-    button.removeAttribute('disabled');
-  } 
+function buttonStateDisabled(button) {
+  button.setAttribute('disabled', 'disabled');
+  button.classList.add(config.inactiveButtonClass);
 }
 
 function checkInputValidity(inputList) {

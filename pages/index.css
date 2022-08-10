@@ -40,3 +40,5 @@
 @import url(../blocks/popup/__image-subtitle/popup__image-subtitle.css);
 @import url(../blocks/popup/__field/_type_error/popup__field_type_error.css);
 @import url(../blocks/popup/__error/_visible/popup__error_visible.css);
+@import url(../blocks/popup/__submit-button/_disabled/popup__submit-button_disabled.css);
+@import url(../blocks/popup/__field-container/popup__field-container.css);

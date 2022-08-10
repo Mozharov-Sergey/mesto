@@ -54,14 +54,18 @@
       <form class="popup__form" name="popup-form" action="#" method="get" novalidate>
         <h2 class="popup__title">Редактировать профиль</h2>
         <fieldset class="popup__fieldset">
-          <input id="name" class="popup__field popup__field_value_name" type="text" placeholder="Имя" name="profileName" minlength="2" maxlength="40" required>
-          <span class="name-input-error"></span>
-          
-          <input id="profession" class="popup__field popup__field_value_profession" type="text" placeholder="Род деятельности"
-            name="profileFunction" minlength="2" maxlength="200" required>
+          <div class="popup__field-container">
+            <input id="name" class="popup__field popup__field_value_name" type="text" placeholder="Имя"
+              name="profileName" minlength="2" maxlength="40" required>
+            <span class="name-input-error"></span>
+          </div>
+          <div class="popup__field-container">
+            <input id="profession" class="popup__field popup__field_value_profession" type="text"
+              placeholder="Род деятельности" name="profileFunction" minlength="2" maxlength="200" required>
             <span class="profession-input-error"></span>
+          </div>
         </fieldset>
-        <button class="popup__submit-button" type="submit" aria-label="Сохранить" disabled>>Сохранить</button>
+        <button class="popup__submit-button" type="submit" aria-label="Сохранить">Сохранить</button>
         <button class="popup__close" type="button" aria-label="Закрыть"></button>
       </form>
     </div>
@@ -73,14 +77,21 @@
       <form class="popup__form popup__form_type_add-card-form" name="popup-form" action="#" method="get" novalidate>
         <h2 class="popup__title">Новое место</h2>
         <fieldset class="popup__fieldset">
-          <input id="description" class="popup__field popup__field_value_description" type="text" placeholder="Название"
-            name="newCardDescription" minlength="2" maxlength="30" required>
+          
+          <div class="popup__field-container">
+            <input id="description" class="popup__field popup__field_value_description" type="text"
+              placeholder="Название" name="newCardDescription" minlength="2" maxlength="30" required>
             <span class="description-input-error"></span>
-          <input id="link" class="popup__field popup__field_value_link" type="url" placeholder="Ссылка на картинку"
-            name="newCardLink" required>
+          </div>
+
+          <div class="popup__field-container">
+            <input id="link" class="popup__field popup__field_value_link" type="url" placeholder="Ссылка на картинку"
+              name="newCardLink" required>
             <span class="link-input-error"></span>
+          </div>
+
         </fieldset>
-        <button class="popup__submit-button" type="submit" aria-label="Сохранить" disabled>Сохранить</button>
+        <button class="popup__submit-button" type="submit" aria-label="Сохранить">Сохранить</button>
         <button class="popup__close" type="button" aria-label="Закрыть"></button>
       </form>
     </div>
@@ -113,4 +124,3 @@
 </body>
 
 </html>
-

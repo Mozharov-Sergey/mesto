@@ -42,3 +42,4 @@
 @import url(../blocks/popup/__error/_visible/popup__error_visible.css);
 @import url(../blocks/popup/__submit-button/_disabled/popup__submit-button_disabled.css);
 @import url(../blocks/popup/__field-container/popup__field-container.css);
+@import url(../blocks/popup/_overlay_dark/popup__overlay_dark.css);

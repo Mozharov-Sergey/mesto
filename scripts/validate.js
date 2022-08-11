@@ -11,16 +11,14 @@ function enableValidation(config) {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
   formList.forEach((form) => {
     buttonStateControl(form);
-    form.addEventListener('submit', (evt) => {
-
-    });
+    form.addEventListener('submit', (evt) => {});
     setEventListeners(form);
   });
 }
 
 function setEventListeners(form) {
   const inputList = Array.from(form.querySelectorAll(config.inputSelector));
-  
+
   buttonStateControl(form);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', () => {

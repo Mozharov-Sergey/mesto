@@ -56,12 +56,12 @@ function createCard(link, description) {
 
   // При создании карточки сразу навешиваем на нее слушатель открытия превью
   newCardImage.addEventListener('click', function () {
-      popupPreviewImage.src = link;
-      popupPreviewImage.alt = description;
-      popupPreview.querySelector('.popup__image-subtitle').textContent =
-        description;
-      openPopup(popupPreview);
-    });
+    popupPreviewImage.src = link;
+    popupPreviewImage.alt = description;
+    popupPreview.querySelector('.popup__image-subtitle').textContent =
+      description;
+    openPopup(popupPreview);
+  });
 
   newCard
     .querySelector('.card__delete-button')
@@ -83,8 +83,7 @@ function submitNewCard(newCardLink, newCardDescription, container, evt) {
     container
   );
   addCardForm.reset();
-  const form = document.querySelector('.popup__form_type_add-card-form');
-  const submitButton = form.querySelector(config.submitButtonSelector);
+  const submitButton = addCardForm.querySelector(config.submitButtonSelector);
   buttonStateDisabled(submitButton);
   closePopup(popupAddCard);
 }
@@ -99,6 +98,16 @@ function likeToggler(evt) {
   target.classList.toggle('cards__like-button_active');
 }
 
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+  document.addEventListener('keydown', closePopupByEscape);
+}
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closePopupByEscape);
+}
+
 function closePopupByEscape(evt) {
   if (evt.key === 'Escape') {
     const popup = document.querySelector('.popup_opened');
@@ -106,47 +115,18 @@ function closePopupByEscape(evt) {
   }
 }
 
-function setClosePopupListeners(popup) {
-  const popupOverlay = popup;
-  popupOverlay.addEventListener('click', function (evt) {
-    if (evt.target.classList.contains('popup')) {
-      closePopup(popup);
-    }
-  });
-  document.addEventListener('keydown', closePopupByEscape);
-
-  // Еще один вариант решения для однократного срабатывания слушателя. Возможно даже более элегантный
-  // document.addEventListener(
-  //   'keydown',
-  //   (evt) => {
-  //     if (evt.key === 'Escape') {
-  //       closePopup(popup);
-  //     }
-  //   },
-  //   { once: true }
-  // );
-}
-
-function openPopup(popup) {
-  popup.classList.add('popup_opened');
-  if (popup.classList.contains('popup_type_open-image')) {
-    popup.classList.add('popup__overlay_dark');
+function closePopupByClick(evt) {
+  if (evt.target.classList.contains('popup')) {
+    closePopup(evt.target);
   }
-  setClosePopupListeners(popup);
-}
-
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-  if (popup.classList.contains('popup_type_open-image')) {
-    popup.classList.remove('popup__overlay_dark');
-  }
-  document.removeEventListener('keydown', closePopupByEscape);
 }
 
 cardsInitialization();
 
-/** PROFILE */
+/** LISTENERS */
+document.addEventListener('click', closePopupByClick);
 
+/** PROFILE */
 profileEditButton.addEventListener('click', function () {
   newUserName.value = profileName.textContent;
   newUserProfession.value = profileProfession.textContent;

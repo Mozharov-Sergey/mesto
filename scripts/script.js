@@ -1,27 +1,36 @@
+import { Card } from './Card.js';
+import { FormValidator } from './FormValidator.js';
+import { initialCards } from './constants.js';
+
+// Обьект передаваемый в класс валидации.
+const config = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__field',
+  submitButtonSelector: '.popup__submit-button',
+  inactiveButtonClass: 'popup__submit-button_disabled',
+  inputErrorClass: 'popup__field_type_error',
+  errorClass: 'popup__error_visible',
+};
+
 /** POPUP VRIABLES */
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const addCardButton = document.querySelector('.profile__add-button');
 const addCardForm = document.querySelector('.popup__form_type_add-card-form');
-const newCardDescription = popupAddCard.querySelector(
-  '.popup__field_value_description'
-);
+const newCardDescription = popupAddCard.querySelector('.popup__field_value_description');
 const newCardLink = popupAddCard.querySelector('.popup__field_value_link');
 const newCardClose = popupAddCard.querySelector('.popup__close');
-
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const editProfileCloseButton = document.querySelector('.popup__close');
 const editProfileForm = document.querySelector('.popup__form');
 const newUserName = popupEditProfile.querySelector('.popup__field_value_name');
-const newUserProfession = popupEditProfile.querySelector(
-  '.popup__field_value_profession'
-);
-
+const newUserProfession = popupEditProfile.querySelector('.popup__field_value_profession');
 const popupCardImage = document.querySelector('.popup_type_open-image');
+const popupCardImageContent = popupCardImage.querySelector('.popup__image');
+const popupCardTitle = popupCardImage.querySelector('.popup__image-subtitle');
 const popupCardImageClose = popupCardImage.querySelector('.popup__close');
 
 /** CARDS VARIABLES */
-const cards = document.querySelector('.cards');
-const cardsTemplate = document.querySelector('#cards__card').content;
+const cardsContainer = document.querySelector('.cards');
 
 /** PROFILE VARIABLES */
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -37,65 +46,41 @@ function editProfileSubmit(evt) {
 
 /** CARDS */
 function cardsInitialization() {
-  initialCards.forEach((item) =>
-    renderCard(createCard(item.link, item.name), cards)
-  );
-}
+  initialCards.forEach((item) => {
+    const card = new Card(item, 'cards__card').generateCard(); // generateCard возвращает разметку карточки
 
-/** CARDS FUNCTIONS */
-function createCard(link, description) {
-  const newCard = cardsTemplate.cloneNode(true);
-  const popupPreview = popupCardImage;
-
-  const newCardImage = newCard.querySelector('.cards__card-image');
-  const popupPreviewImage = popupPreview.querySelector('.popup__image');
-
-  newCardImage.src = link;
-  newCardImage.alt = description;
-  newCard.querySelector('.cards__card-title').textContent = description;
-
-  // При создании карточки сразу навешиваем на нее слушатель открытия превью
-  newCardImage.addEventListener('click', function () {
-    popupPreviewImage.src = link;
-    popupPreviewImage.alt = description;
-    popupPreview.querySelector('.popup__image-subtitle').textContent =
-      description;
-    openPopup(popupPreview);
+    // При создании карточки сразу навешиваем слушатель открытия попапа.
+    setPreviewCardListener(card);
+    cardsContainer.append(card);
   });
-
-  newCard
-    .querySelector('.card__delete-button')
-    .addEventListener('click', cardDelete);
-  newCard
-    .querySelector('.cards__like-button')
-    .addEventListener('click', likeToggler);
-  return newCard;
 }
 
-function renderCard(newCard, container) {
-  container.prepend(newCard);
+// Т.к наполнение попапа карточки происходит как при инициализации, так и при добавлении новых карточек,
+// Руководствуясь приципом DRY решил вынести создание слушателя открытия попапа превью карточки в отдельную функцию
+function setPreviewCardListener(card) {
+  card.querySelector('.cards__card-image').addEventListener('click', () => {
+    popupCardImageContent.src = card.querySelector('.cards__card-image').src;
+    popupCardImageContent.alt = card.querySelector('.cards__card-title').textContent;
+    popupCardTitle.textContent = card.querySelector('.cards__card-title').textContent;
+    openPopup(popupCardImage);
+  });
 }
 
-function submitNewCard(newCardLink, newCardDescription, container, evt) {
+function submitNewCard(newCardLink, newCardDescription, templateSelector, evt) {
   evt.preventDefault();
-  renderCard(
-    createCard(newCardLink.value, newCardDescription.value),
-    container
-  );
+
+  const card = new Card(
+    { name: newCardDescription.value, link: newCardLink.value },
+    templateSelector
+  ).generateCard();
+  setPreviewCardListener(card);
+  cardsContainer.prepend(card);
+
   addCardForm.reset();
   const submitButton = addCardForm.querySelector(config.submitButtonSelector);
-  buttonStateDisabled(submitButton);
+  buttonStateDisabled(submitButton); // Нарушение принципа DRY. Аналогичная функция есть в FormValidator.js.
+  //Возможно стоит ее сделать статической, или передать ее в конструктор классаа, но такого в ТЗ нет.
   closePopup(popupAddCard);
-}
-
-function cardDelete(evt) {
-  const target = evt.target;
-  target.closest('.cards__card').remove();
-}
-
-function likeToggler(evt) {
-  const target = evt.target;
-  target.classList.toggle('cards__like-button_active');
 }
 
 function openPopup(popup) {
@@ -121,7 +106,22 @@ function closePopupByClick(evt) {
   }
 }
 
+function buttonStateDisabled(button) {
+  button.setAttribute('disabled', 'disabled');
+  button.classList.add(config.inactiveButtonClass);
+}
+
+function initializationFormValidation() {
+  const formList = Array.from(document.querySelectorAll(config.formSelector));
+  formList.forEach((form) => {
+    const validator = new FormValidator(config, form);
+    validator.enableValidation();
+  });
+}
+
+/** ВЫЗОВЫ */
 cardsInitialization();
+initializationFormValidation();
 
 /** LISTENERS */
 document.addEventListener('click', closePopupByClick);
@@ -135,13 +135,11 @@ profileEditButton.addEventListener('click', function () {
 
 editProfileForm.addEventListener('submit', editProfileSubmit);
 
-editProfileCloseButton.addEventListener('click', () =>
-  closePopup(popupEditProfile)
-);
+editProfileCloseButton.addEventListener('click', () => closePopup(popupEditProfile));
 
 /** CARD */
 addCardForm.addEventListener('submit', function (evt) {
-  submitNewCard(newCardLink, newCardDescription, cards, evt);
+  submitNewCard(newCardLink, newCardDescription, 'cards__card', evt);
 });
 
 addCardButton.addEventListener('click', () => openPopup(popupAddCard));

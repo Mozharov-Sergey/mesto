@@ -9,7 +9,7 @@ export class FormValidator {
   }
 
   _setEventListeners(form) {
-    this.submitButton = form.querySelector('.popup__submit-button');
+    this._submitButton = form.querySelector('.popup__submit-button');
     this.inputList = Array.from(form.querySelectorAll(this.config.inputSelector));
 
     this.buttonStateControl();
@@ -42,13 +42,13 @@ export class FormValidator {
   }
 
   _buttonStateActive() {
-    this.submitButton.removeAttribute('disabled');
-    this.submitButton.classList.remove(this.config.inactiveButtonClass);
+    this._submitButton.removeAttribute('disabled');
+    this._submitButton.classList.remove(this.config.inactiveButtonClass);
   }
 
   _buttonStateDisabled() {
-    this.submitButton.setAttribute('disabled', 'disabled');
-    this.submitButton.classList.add(this.config.inactiveButtonClass);
+    this._submitButton.setAttribute('disabled', 'disabled');
+    this._submitButton.classList.add(this.config.inactiveButtonClass);
   }
 
   _showInputError(inputElement, validationMessage) {

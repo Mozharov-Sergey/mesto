@@ -37,5 +37,11 @@ export default class Popup {
     this._buttonClose.removeEventListener('click', this.close);
     document.removeEventListener('keydown', this._handleEscClose);
     document.removeEventListener('click', this._handleClickOnFieldsClose);
+
+    //  if (this._popup.classList.contains('popup_type_open-image')){
+    //   this.remove();
+    //  }
+    // По скольку для каждой конкретной карточки создается отдельный экземпляр Popup, то по хорошему его стоит удалять при закрытии попапа.
+    // Но так и не понял как заставить экземпляр класса удалить самого себя. this.remove() не работает (
   };
 }

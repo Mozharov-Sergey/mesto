@@ -1,7 +1,9 @@
 import { openPopup, popupCardImage, popupCardImageContent, popupCardTitle } from './script.js';
+import PopupWithImage from './PopupWithImage.js';
 
 export default class Card {
   constructor(data, templateSelector) {
+    this._data = data;
     this._templateSelector = templateSelector;
     this._imageUrl = data.link;
     this._title = data.name;
@@ -24,11 +26,13 @@ export default class Card {
     this._cardElement.remove();
   };
 
-  _handlerOpenPopupPreview(popup, callback) {
-    popupCardImageContent.src = this._cardImage.src;
-    popupCardImageContent.alt = this._cardImage.alt;
-    popupCardTitle.textContent = this._cardTitle.textContent;
-    callback(popup);
+  _handleCardClick() {
+    this._popupImagePreview = new PopupWithImage('.popup_type_open-image', (image, subtitle) => {
+      image.src = this._imageUrl;
+      image.alt = this._title;
+      subtitle.textContent = this._title;
+    });
+    this._popupImagePreview.open();
   }
 
   _setEventListeners() {
@@ -39,7 +43,7 @@ export default class Card {
     this._deleteButton.addEventListener('click', this._handlerRemoveCard); // Вариант сохранения контекста this с помощью стрелочной функции
 
     this._cardImage.addEventListener('click', () => {
-      this._handlerOpenPopupPreview(popupCardImage, openPopup);
+      this._handleCardClick();
     });
   }
 

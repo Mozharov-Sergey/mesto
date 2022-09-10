@@ -1,6 +1,6 @@
 import { openPopup, popupCardImage, popupCardImageContent, popupCardTitle } from './script.js';
 
-class Card {
+export default class Card {
   constructor(data, templateSelector) {
     this._templateSelector = templateSelector;
     this._imageUrl = data.link;
@@ -57,5 +57,3 @@ class Card {
     return this._cardElement;
   }
 }
-
-export { Card };

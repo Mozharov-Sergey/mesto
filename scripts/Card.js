@@ -1,4 +1,4 @@
-import { openPopup, popupCardImage, popupCardImageContent, popupCardTitle } from './script.js';
+import { popupCardImage, popupCardImageContent, popupCardTitle } from './script.js';
 import PopupWithImage from './PopupWithImage.js';
 
 export default class Card {

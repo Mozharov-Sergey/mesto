@@ -16,8 +16,4 @@ export default class PopupWithImage extends Popup {
     this._imageSubtitle = this._popup.querySelector('.popup__image-subtitle');
     this._callback(this._image, this._imageSubtitle);
   }
-
-  close() {
-    super.close();
-  }
 }

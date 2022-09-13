@@ -3,6 +3,7 @@ import Popup from './Popup.js';
 export default class PopupWithImage extends Popup {
   constructor(popup, callback) {
     super(popup);
+    super.setEventListeners();
     this._callback = callback;
   }
 

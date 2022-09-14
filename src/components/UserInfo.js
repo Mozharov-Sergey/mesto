@@ -1,4 +1,4 @@
-import { profileName, profileProfession } from './index.js';
+import { profileName, profileProfession } from '../pages/index.js';
 
 export default class UserInfo {
   constructor(userData) {

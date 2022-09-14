@@ -1,5 +1,5 @@
 import Card from './Card.js';
-import { initialCards } from './constants.js';
+import { initialCards } from '../utils/constants.js';
 
 export default class Section {
   constructor({ items, renderer }, container) {

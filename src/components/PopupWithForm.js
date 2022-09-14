@@ -1,5 +1,6 @@
 import Popup from './Popup.js';
-import { validators, userInfo, userNameNew, userProfessionNew, popupEditProfileObject } from '../pages/index.js';
+import { userInfo } from '../pages/index.js';
+import { validators, userNameNew, userProfessionNew} from '../utils/constants.js';
 
 export default class PopupWithForm extends Popup {
   constructor(popup, callback) {

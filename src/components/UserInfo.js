@@ -1,6 +1,5 @@
-// import { profileName, profileProfession } from '../pages/index.js';
 import { profileName, profileProfession } from '../utils/constants.js';
-
+// Пока оставил импорт тут ради удобства. Имею ввиду, что импорта тут быть не должно, а данные нужно запрашивать с бэка, но его пока нет.
 export default class UserInfo {
   constructor(userData) {
     this._name = userData.name;

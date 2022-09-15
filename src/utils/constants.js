@@ -48,3 +48,4 @@ export const popupCardImageContent = popupCardImage.querySelector('.popup__image
 export const popupCardTitle = popupCardImage.querySelector('.popup__image-subtitle');
 export const profileName = document.querySelector('.profile__name');
 export const profileProfession = document.querySelector('.profile__profession');
+export const cardsContainer = document.querySelector('.cards');

@@ -3,20 +3,20 @@ import { profileName, profileProfession } from '../utils/constants.js';
 export default class UserInfo {
   constructor(userData) {
     this._name = userData.name;
-    this._info = userData.info;
+    this._profession = userData.profession;
   }
 
   getUserInfo() {
     return {
       name: this._name,
-      info: this._info,
+      profession: this._profession,
     };
   }
 
   setUserInfo(newUserData) {
     this._name = newUserData.name;
-    this._info = newUserData.info;
+    this._profession = newUserData.info;
     profileName.textContent = this._name;
-    profileProfession.textContent = this._info;
+    profileProfession.textContent = this._profession;
   }
 }

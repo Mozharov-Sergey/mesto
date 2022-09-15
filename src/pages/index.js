@@ -33,7 +33,7 @@ const cardList = new Section(
 );
 
 /** ИНФОРМАЦИЯ О ПОЛЬЗОВАТЕЛЕ */
-export const userInfo = new UserInfo({ name: 'Сергей Можаров', info: 'web-developer' });
+export const userInfo = new UserInfo({ name: 'Сергей Можаров', profession: 'web-developer' });
 
 /** ФУНКЦИИ ИНИЦИАЛИЗАЦИИ */
 function cardsInitialization() {
@@ -52,7 +52,7 @@ function initializationFormValidation() {
 function initialSettingUserInfo() {
   const userData = userInfo.getUserInfo();
   profileName.textContent = userData.name;
-  profileProfession.textContent = userData.info;
+  profileProfession.textContent = userData.profession;
 }
 
 /** ВЫЗОВЫ ФУНКЦИЙ ИНИЦИАЛИЗАЦИИ */
@@ -89,7 +89,11 @@ const popupAddImageObject = new PopupWithForm(
 /** УСТАНОВКА СЛУШАТЕЛЕЙ */
 // buttonEditProfile.addEventListener('click', popupEditProfileObject.open);
 buttonEditProfile.addEventListener('click', () => {
+  validators.validatorFormEditProfile.resetValidation();
   popupEditProfileObject.setInputValues(userInfo.getUserInfo());
   popupEditProfileObject.open();
 });
-buttonAddCard.addEventListener('click', popupAddImageObject.open);
+buttonAddCard.addEventListener('click', () => {
+  validators.validatorFormAddImage.resetValidation();
+  popupAddImageObject.open();
+});

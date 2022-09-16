@@ -33,7 +33,8 @@ const cardList = new Section(
 );
 
 /** ИНФОРМАЦИЯ О ПОЛЬЗОВАТЕЛЕ */
-export const userInfo = new UserInfo({ name: 'Сергей Можаров', profession: 'web-developer' });
+export const userInfo = new UserInfo({ name: profileName, profession: profileProfession });
+userInfo.setUserInfo({ name: 'Сергей Можаров', info: 'Frontend developer' });
 
 /** ФУНКЦИИ ИНИЦИАЛИЗАЦИИ */
 function cardsInitialization() {

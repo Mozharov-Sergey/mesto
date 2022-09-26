@@ -1,29 +1,11 @@
-export const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
+export const apiOptions = {
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-51',
+  headers: {
+    authorization: '29666a6f-1d5a-4d3a-91e9-5a126f6d6591',
+    'Content-Type': 'application/json'
   },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-  },
-];
+}
+
 
 export const validatorsConfig = {
   formSelector: '.popup__form',
@@ -39,6 +21,7 @@ export const buttonAddCard = document.querySelector('.profile__add-button');
 export const buttonEditProfile = document.querySelector('.profile__edit-button');
 export const formAddCard = document.querySelector('.popup__form_type_add-card-form');
 export const formEditProfile = document.querySelector('.popup__form');
+export const formChangeAvatar = document.querySelector('.popup_type_change-avatar');
 
 export const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 export const userNameNew = popupEditProfile.querySelector('.popup__field_value_name');
@@ -49,3 +32,4 @@ export const popupCardTitle = popupCardImage.querySelector('.popup__image-subtit
 export const profileName = document.querySelector('.profile__name');
 export const profileProfession = document.querySelector('.profile__profession');
 export const cardsContainer = document.querySelector('.cards');
+export const avatar = document.querySelector('.profile__image');

@@ -19,12 +19,21 @@ import UserInfo from '../components/UserInfo.js';
 import './index.css';
 import PopupWithImage from '../components/PopupWithImage.js';
 import Api from '../components/Api.js';
-let cardList = {}; 
+import Popup from '../components/Popup.js';
+import PopupAcception from '../components/PopupAcception.js'
+let cardList = {};
+
+const apiController = new Api(apiOptions);
+
+const popupAcceptionDeleteCard = new PopupAcception('.popup_type_acception', (card, id) => {
+  card.remove();
+  apiController.deleteCard(id);
+});
+popupAcceptionDeleteCard.setEventListeners();
+
 
 const popupImagePreviewObject = new PopupWithImage('.popup_type_open-image');
 export const userInfo = new UserInfo({ name: profileName, profession: profileProfession });
-const apiController = new Api(apiOptions);
-
 const cards = apiController.getInitialCards();
 const userData = apiController.getUserData();
 
@@ -50,8 +59,8 @@ function cardsInitialization() {
       renderer: (item, container) => {
         const card = new Card(item, 'cards__card', () => {
           popupImagePreviewObject.open(item.link, item.name);
-        }).generateCard();
-        container.prepend(card);
+        },popupAcceptionDeleteCard).generateCard();
+        container.append(card);
       },
     },
     '.cards'
@@ -59,6 +68,7 @@ function cardsInitialization() {
 })
 .then((res) => res.addItems())
 }
+
 function initialSettingUserInfo() {
   userData.then((data) => {
     userInfo.setUserInfo({ name: data.name, info: data.about });
@@ -115,28 +125,34 @@ export const popupChangeAvatar = new PopupWithForm(
 
 /** ПОПАП ДОБАВЛЕНИЯ КАРТОЧКИ */
 const popupAddImageObject = new PopupWithForm(
-  '.popup_type_add-card', // Создать обьект идентификаторов и подсовывать элемент обьекта идентификаторов '.popup_type_add-card
+  '.popup_type_add-card',
   validators.validatorFormAddImage,
   (evt, inputValues) => {
     evt.preventDefault();
     const values = inputValues;
-    cardList.addItem({ name: values.newCardDescription, link: values.newCardLink });
+
+    apiController.addCard(values.newCardLink, values.newCardDescription)
+    .then((res) => {
+      return cardList.addItem(res); // ПРОРАБОТАТЬМЕСТО ДОБАВЛЕНИЯ КАРТОЧКИ
+    })
+    .finally((res) => popupAddImageObject.close())
     validators.validatorFormAddImage.buttonStateControl();
-    popupAddImageObject.close();
   }
 );
 
+
 /** УСТАНОВКА СЛУШАТЕЛЕЙ */
-// buttonEditProfile.addEventListener('click', popupEditProfileObject.open);
 buttonEditProfile.addEventListener('click', () => {
   validators.validatorFormEditProfile.resetValidation();
   popupEditProfileObject.setInputValues(userInfo.getUserInfo());
   popupEditProfileObject.open();
 });
+
 buttonAddCard.addEventListener('click', () => {
   validators.validatorFormAddImage.resetValidation();
   popupAddImageObject.open();
 });
+
 avatar.addEventListener('click', () => {
 
   validators.validatorFormChangeAvatar.resetValidation();

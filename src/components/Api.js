@@ -21,27 +21,32 @@ export default class Api {
       method: 'GET',
       headers: this._headers,
     }).then((res) => {
-      if(res.status === 200) {
+      if (res.status === 200) {
         return res.json();
       }
-      Promise.reject(console.log(`Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me`))
-    })
+      Promise.reject(console.log(`Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me`));
+    });
   }
 
   changeUserData(name, about) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
+    return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
         name: name,
-        about: about
-      })
+        about: about,
+      }),
     }).then((res) => {
-      if(res.status === 200) {
+      if (res.status === 200) {
         return res.json();
+      } else {
+        Promise.reject(
+          console.log(
+            `Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me при попытке редактирования профиля`
+          )
+        );
       }
-      Promise.reject(console.log(`Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me при попытке редактирования профиля`))
-    })
+    });
   }
 
   changeUserAvatar(link) {
@@ -50,18 +55,47 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify({
         avatar: link,
-      })
+      }),
     }).then((res) => {
-      if(res.status === 200) { 
+      if (res.status === 200) {
         return res.json();
+      } else {
+        Promise.reject(
+          console.log(
+            `Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me/avatar при попытке редактирования аватара профиля`
+          )
+        );
       }
-      Promise.reject(console.log(`Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me/avatar при попытке редактирования аватара профиля`))
-    })
+    });
   }
 
-  addCard() {}
+  addCard(link, name) {
+    return fetch(`${this._baseUrl}/cards`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: name,
+        link: link,
+      }),
+    }).then((res) => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        Promise.reject(
+          console.log(
+            `Что-то пошло не так с запросом к странице ${this._baseUrl}/cards при попытке добавить новую карточку`
+          )
+        );
+      }
+    });
+  }
 
-  deleteCard() {}
+  deleteCard(id) {
+    fetch(`${this._baseUrl}/cards/${id}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    })
+  }
 
   likeCard() {}
 

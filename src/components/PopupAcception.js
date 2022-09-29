@@ -8,10 +8,6 @@ export default class PopupAcception extends Popup {
     this._callback = this._callback.bind(this);
   }
 
-  setTarget(target) {
-    this.target = target;
-  }
-
   open(card, id) {
     super.open()
     this.card = card;

@@ -36,17 +36,7 @@ export default class Api {
         name: name,
         about: about,
       }),
-    }).then((res) => {
-      if (res.status === 200) {
-        return res.json();
-      } else {
-        Promise.reject(
-          console.log(
-            `Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me при попытке редактирования профиля`
-          )
-        );
-      }
-    });
+    })
   }
 
   changeUserAvatar(link) {
@@ -90,14 +80,52 @@ export default class Api {
     });
   }
 
-  deleteCard(id) {
-    fetch(`${this._baseUrl}/cards/${id}`, {
+  deleteCard(cardId) {
+    fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers,
-    })
+    }).then((res) => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        Promise.reject(
+          console.log(`Что-то пошло не так при попытке удалить карточку ${this.baseUrl}/cards/${cardId}`)
+        );
+      }
+    });
   }
 
-  likeCard() {}
+  likeCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'PUT',
+      headers: this._headers,
+    }).then((res) => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        Promise.reject(
+          console.log(
+            `Что-то пошло не так при попытке лайкнуть карточку ${this.baseUrl}/cards/${cardId}/likes`
+          )
+        );
+      }
+    });
+  }
 
-  unlikeCard() {}
+  unlikeCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'DELETE',
+      headers: this._headers,
+    }).then((res) => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        Promise.reject(
+          console.log(
+            `Что-то пошло не так при попытке разлайкать карточку ${this.baseUrl}/cards/${cardId}/likes`
+          )
+        );
+      }
+    });
+  }
 }

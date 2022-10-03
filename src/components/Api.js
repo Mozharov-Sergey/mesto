@@ -4,15 +4,22 @@ export default class Api {
     this._headers = options.headers;
   }
 
+  _checkRequestResult(res) {
+    if (res.status === 200) {
+      return true;
+    }
+    return false;
+  }
+
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       method: 'GET', // GET - дефолтный метод отправки. Можно было и не указывать.
       headers: this._headers,
     }).then((res) => {
-      if (res.status === 200) {
+      if (this._checkRequestResult(res)) {
         return res.json();
       }
-      Promise.reject(console.log(`Что-то пошло не так с запросом к странице ${this._baseUrl}/cards`));
+      return Promise.reject(console.log(`Что-то пошло не так с запросом к странице ${this._baseUrl}/cards`));
     });
   }
 
@@ -21,10 +28,10 @@ export default class Api {
       method: 'GET',
       headers: this._headers,
     }).then((res) => {
-      if (res.status === 200) {
+      if (this._checkRequestResult(res)) {
         return res.json();
       }
-      Promise.reject(console.log(`Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me`));
+      return Promise.reject(console.log(`Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me`));
     });
   }
 
@@ -37,6 +44,17 @@ export default class Api {
         about: about,
       }),
     })
+    .then((res) => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        Promise.reject(
+          console.log(
+            `Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me при попытке редактирования профиля`
+          )
+        );
+      }
+    })
   }
 
   changeUserAvatar(link) {
@@ -47,10 +65,10 @@ export default class Api {
         avatar: link,
       }),
     }).then((res) => {
-      if (res.status === 200) {
+      if (this._checkRequestResult(res)) {
         return res.json();
       } else {
-        Promise.reject(
+        return Promise.reject(
           console.log(
             `Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me/avatar при попытке редактирования аватара профиля`
           )
@@ -68,10 +86,10 @@ export default class Api {
         link: link,
       }),
     }).then((res) => {
-      if (res.status === 200) {
+      if (this._checkRequestResult(res)) {
         return res.json();
       } else {
-        Promise.reject(
+        return Promise.reject(
           console.log(
             `Что-то пошло не так с запросом к странице ${this._baseUrl}/cards при попытке добавить новую карточку`
           )
@@ -81,14 +99,15 @@ export default class Api {
   }
 
   deleteCard(cardId) {
-    fetch(`${this._baseUrl}/cards/${cardId}`, {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers,
     }).then((res) => {
-      if (res.status === 200) {
+      if (this._checkRequestResult(res)) {
         return res.json();
-      } else {
-        Promise.reject(
+      } 
+      else {
+        return Promise.reject(
           console.log(`Что-то пошло не так при попытке удалить карточку ${this.baseUrl}/cards/${cardId}`)
         );
       }
@@ -100,10 +119,10 @@ export default class Api {
       method: 'PUT',
       headers: this._headers,
     }).then((res) => {
-      if (res.status === 200) {
+      if (this._checkRequestResult(res)) {
         return res.json();
       } else {
-        Promise.reject(
+        return Promise.reject(
           console.log(
             `Что-то пошло не так при попытке лайкнуть карточку ${this.baseUrl}/cards/${cardId}/likes`
           )
@@ -117,10 +136,10 @@ export default class Api {
       method: 'DELETE',
       headers: this._headers,
     }).then((res) => {
-      if (res.status === 200) {
+      if (this._checkRequestResult(res)) {
         return res.json();
       } else {
-        Promise.reject(
+        return Promise.reject(
           console.log(
             `Что-то пошло не так при попытке разлайкать карточку ${this.baseUrl}/cards/${cardId}/likes`
           )

@@ -6,7 +6,7 @@ export default class Card {
     handleRemoveCard,
     handleLike,
     handleUnlike,
-    userInfo
+    userId
   ) {
     this._data = data;
     this._templateSelector = templateSelector;
@@ -15,7 +15,7 @@ export default class Card {
     this._title = data.name;
     this._cardOwnerId = data.owner._id;
     this._cardId = data._id;
-    this._userInfo = userInfo;
+    this._userId = userId;
     this._handleRemoveCard = handleRemoveCard;
     this._handleRemoveCard = this._handleRemoveCard.bind(this);
     this._handleLike = handleLike;
@@ -34,8 +34,20 @@ export default class Card {
 
   _checkIsLiked() {
     return this._data.likes.some((item) => {
-      return item._id === this._userInfo.id;
+      
+      return (item._id === this._userId);
     });
+  }
+
+  like(numberOfLikes, button, counter) {
+    button.classList.add('cards__like-button_active');
+    counter.textContent = numberOfLikes;
+
+  }
+
+  dislike(numberOfLikes, button, counter) {
+    button.classList.remove('cards__like-button_active');
+    counter.textContent = numberOfLikes;
   }
 
   _getTemplate() {
@@ -48,12 +60,16 @@ export default class Card {
 
   _setEventListeners() {
     this._likeButton.addEventListener('click', () => {
-      if (this._checkIsLiked()) {
-        this._handleUnlike(this._cardId, this._likeButton, this._likesCounter);
+      if (this._isLiked) {
         this._isLiked = false;
+        this._handleUnlike(this._cardId, this.dislike, this._likeButton, this._likesCounter);
+        
+        
+
       } else {
-        this._handleLike(this._cardId, this._likeButton, this._likesCounter);
         this._isLiked = true;
+        this._handleLike(this._cardId, this.like, this._likeButton, this._likesCounter);
+        
       }
     });
 
@@ -71,7 +87,7 @@ export default class Card {
     this._cardTitle.textContent = this._title;
     this._cardImage.alt = this._title;
 
-    if (this._userInfo.id !== this._cardOwnerId) {
+    if (this._userId !== this._cardOwnerId) {
       this._deleteButton.classList.add('cards__delete-button_disabled');
     }
 

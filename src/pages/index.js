@@ -13,8 +13,7 @@ import {
   avatar,
   formChangeAvatar,
   buttonSubmitChangeUserData,
-  buttonSubmitChangeUserAvatar,
-  buttonSubmitNewCard
+  buttonSubmitNewCard,
 } from '../utils/constants.js';
 import Section from '../components/Section.js';
 import PopupWithForm from '../components/PopupWithForm.js';
@@ -24,80 +23,71 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import Api from '../components/Api.js';
 import PopupAcception from '../components/PopupAcception.js';
 let cardList = {};
+import { changeButtonText } from '../utils/utils.js';
 
 const apiController = new Api(apiOptions);
-const user = apiController.getUserData();
-
-const popupAcceptionDeleteCard = new PopupAcception('.popup_type_acception', (card, cardId) => {
-  card.remove();
-  apiController.deleteCard(cardId);
-  popupAcceptionDeleteCard.close();
-});
-popupAcceptionDeleteCard.setEventListeners();
-
-const popupImagePreviewObject = new PopupWithImage('.popup_type_open-image');
 const userInfo = new UserInfo({ name: profileName, profession: profileProfession }); // Данные из полей формы сразу обновляются в функции инициализации данных пользователя.
-const cards = apiController.getInitialCards();
 
 /** ФУНКЦИИ ИНИЦИАЛИЗАЦИИ */
-function cardsInitialization() {
-  return user.then((userData) => {
-    userInfo.setUserInfo({ name: userData.name, info: userData.about, id: userData._id }); // Получаем информацию о пользователе
-    cards // Только после того, как информация о пользователе получена ее можно передавать в карточки
-      .then((res) => {
-        const array = Array.from(res).reverse(); // Разворачиваем массив, что бы новые карточки появлялись в начале.
-        return (cardList = new Section(
-          {
-            items: array,
-
-            renderer: (item, container) => {
-              const card = new Card(
-                item, //data
-                'cards__card', //template selector
-
-                //handleCardClick
-                () => {
-                  popupImagePreviewObject.open(item.link, item.name);
-                },
-
-                // handleCardRemove
-                (cardElement, cardId) => {
-                  popupAcceptionDeleteCard.open(cardElement, cardId);
-                },
-
-                // handleLike
-                (cardId, likeButton, likesCounter) => {
-                  apiController.likeCard(cardId).then((res) => {
-                    likeButton.classList.add('cards__like-button_active');
-                    likesCounter.textContent = res.likes.length;
-                  });
-                },
-
-                // handleUnlike
-                (cardId, likeButton, likesCounter) => {
-                  apiController.unlikeCard(cardId).then((res) => {
-                    likeButton.classList.remove('cards__like-button_active');
-                    likesCounter.textContent = res.likes.length;
-                  });
-                },
-                // userInfo
-                userInfo.getUserInfo()
-              ).generateCard();
-              container.prepend(card);
-            },
-          },
-          '.cards'
-        ));
-      })
-      .then((res) => res.addItems());
-  });
+function getInitialInfo() {
+  const userInfo = apiController.getUserData();
+  const cards = apiController.getInitialCards();
+  return Promise.all([userInfo, cards]);
 }
 
-function initialSettingUserInfo() {
-  return user.then((data) => {
-    userInfo.setUserInfo({ name: data.name, info: data.about, id: data._id });
-    avatar.style.backgroundImage = `url('${data.avatar}')`;
-  });
+function cardsInitialization(cards) {
+  cards // Только после того, как информация о пользователе получена ее можно передавать в карточки
+    .then((res) => {
+      const array = res[1].reverse(); // Разворачиваем массив, что бы новые карточки появлялись в начале.
+      return (cardList = new Section(
+        {
+          items: array,
+
+          renderer: (item, container) => {
+            const card = new Card(
+              item,
+              'cards__card',
+
+              //handleCardClick
+              () => {
+                popupImagePreviewObject.open(item.link, item.name);
+              },
+
+              // handleCardRemove
+              (cardElement, cardId) => {
+                popupAcceptionDeleteCard.open(cardElement, cardId);
+              },
+              // НЕ ПОНЯЛ КОМЕНТАРИЯ ПО ПОВОДУ УДАЛЕНИЯ КАРТОЧЕК. У МЕНЯ ИКОНКА ВПОЛНЕ КОРРЕКТНО ПОЯВЛЯЕТСЯ И УДАЛЯЕТСЯ
+              // ПРУФЫ: https://disk.yandex.ru/d/ELAgUpq70ZVb0A
+
+              // handleLike
+              (cardId, like, button, counter) => {
+                apiController.likeCard(cardId).then((res) => {
+                  like(res.likes.length, button, counter);
+                  console.log(res.likes.length);
+                  console.log('like');
+                });
+              },
+
+              // handleUnlike
+              (cardId, dislike, button, counter) => {
+                apiController.unlikeCard(cardId).then((res) => {
+                  dislike(res.likes.length, button, counter);
+                  console.log(res.likes.length);
+                  console.log('dislike');
+                });
+              },
+
+              userInfo.getUserId()
+            ).generateCard();
+            container.prepend(card);
+          },
+        },
+        '.cards'
+      ));
+    })
+    .then((res) => res.addItems())
+    .catch((err) => console.log(err));
 }
 
 function initializationFormValidation() {
@@ -111,43 +101,43 @@ function initializationFormValidation() {
   validators.validatorFormChangeAvatar.enableValidation();
 }
 
+function initialSettingUserInfo(userData) {
+  userData.then((res) => {
+    userInfo.setUserInfo({
+      name: res[0].name,
+      info: res[0].about,
+      id: res[0]._id,
+      avatar: res[0].avatar,
+    });
+    avatar.style.backgroundImage = `url('${res[0].avatar}')`;
+  });
+}
+
 /** ВЫЗОВЫ ФУНКЦИЙ ИНИЦИАЛИЗАЦИИ */
-initialSettingUserInfo();
-cardsInitialization();
+const initialInfo = getInitialInfo();
+initialSettingUserInfo(initialInfo);
+cardsInitialization(initialInfo);
 initializationFormValidation();
 
-/** РЕДАКТИРОВАНИЕ ПРОФИЛЯ */
+/** ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ */
 const popupEditProfileObject = new PopupWithForm(
   '.popup_type_edit-profile',
   validators.validatorFormEditProfile,
 
   (evt, inputValues) => {
     evt.preventDefault();
-    const values = inputValues;
+    changeButtonText(buttonSubmitChangeUserData, 'Сохранение...');
     apiController
-      .changeUserData(values.profileName, values.profileFunction)
+      .changeUserData(inputValues.profileName, inputValues.profileFunction)
       .then((res) => {
-        return res;
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          Promise.reject(
-            console.log(
-              `Что-то пошло не так с запросом к странице ${this._baseUrl}/users/me при попытке редактирования профиля`
-            )
-          );
-        }
-      })
-      .then((res) => {
-        buttonSubmitChangeUserData.textContent = 'Сохранение...';
         userInfo.setUserInfo({ name: res.name, info: res.about });
-        setTimeout(() => (buttonSubmitChangeUserData.textContent = 'Сохранить'), 3000);
       })
-      .finally((res) => {
+      .catch((err) => console.log(err))
+      .then((res) => {
         popupEditProfileObject.close();
-      });
+      })
+      .catch((err) => console.log(err))
+      .finally((res) => changeButtonText(buttonSubmitChangeUserData, 'Сохранить'));
   }
 );
 
@@ -157,17 +147,18 @@ const popupChangeAvatar = new PopupWithForm(
   validators.validatorFormChangeAvatar,
   (evt, inputValues) => {
     evt.preventDefault();
-    const values = inputValues;
+    changeButtonText(buttonSubmitChangeUserData, 'Сохранение...');
     apiController
-      .changeUserAvatar(values.avatar)
+      .changeUserAvatar(inputValues.avatar)
       .then((res) => {
-        buttonSubmitChangeUserAvatar.textContent = 'Сохранение...';
         avatar.style.backgroundImage = `url('${res.avatar}')`;
-        setTimeout(() => (buttonSubmitChangeUserAvatar.textContent = 'Сохранить'), 3000);
       })
-      .finally((res) => {
+      .catch((err) => console.log(err))
+      .then((res) => {
         popupChangeAvatar.close();
-      });
+      })
+      .catch((err) => console.log(err))
+      .finally((res) => changeButtonText(buttonSubmitChangeUserData, 'Сохранить'));
   }
 );
 
@@ -177,19 +168,37 @@ const popupAddImageObject = new PopupWithForm(
   validators.validatorFormAddImage,
   (evt, inputValues) => {
     evt.preventDefault();
-    const values = inputValues;
-
+    changeButtonText(buttonSubmitChangeUserData, 'Сохранение...');
     apiController
-      .addCard(values.newCardLink, values.newCardDescription)
+      .addCard(inputValues.newCardLink, inputValues.newCardDescription)
       .then((res) => {
         buttonSubmitNewCard.textContent = 'Сохранение...';
         cardList.addItem(res);
         setTimeout(() => (buttonSubmitNewCard.textContent = 'Сохранить'), 3000);
       })
-      .finally((res) => popupAddImageObject.close());
-    validators.validatorFormAddImage.buttonStateControl();
+      .catch((err) => console.log(err))
+      .then((res) => {
+        popupAddImageObject.close();
+        validators.validatorFormAddImage.buttonStateControl();
+      })
+      .catch((err) => console.log(err))
+      .finally((res) => changeButtonText(buttonSubmitChangeUserData, 'Сохранить'));
   }
 );
+
+/** ПОПАП ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ КАРТОЧКИ */
+const popupAcceptionDeleteCard = new PopupAcception('.popup_type_acception', (card, cardId) => {
+  const deleteController = apiController.deleteCard(cardId);
+  deleteController
+    .then((res) => {
+      card.remove();
+    })
+    .catch((err) => console.log(err));
+  popupAcceptionDeleteCard.close();
+});
+popupAcceptionDeleteCard.setEventListeners();
+
+const popupImagePreviewObject = new PopupWithImage('.popup_type_open-image');
 
 /** УСТАНОВКА СЛУШАТЕЛЕЙ */
 buttonEditProfile.addEventListener('click', () => {
@@ -205,10 +214,5 @@ buttonAddCard.addEventListener('click', () => {
 
 avatar.addEventListener('click', () => {
   validators.validatorFormChangeAvatar.resetValidation();
-  apiController.getUserData().then((res) => {
-    popupChangeAvatar.setInputValues({ avatar: res.avatar });
-    validators.validatorFormChangeAvatar.buttonStateControl();
-  });
-
   popupChangeAvatar.open();
 });

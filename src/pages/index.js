@@ -110,7 +110,8 @@ function initialSettingUserInfo(userData) {
       avatar: res[0].avatar,
     });
     avatar.style.backgroundImage = `url('${res[0].avatar}')`;
-  });
+  })
+  .catch((err) => console.log(err));
 }
 
 /** ВЫЗОВЫ ФУНКЦИЙ ИНИЦИАЛИЗАЦИИ */
@@ -193,8 +194,11 @@ const popupAcceptionDeleteCard = new PopupAcception('.popup_type_acception', (ca
     .then((res) => {
       card.remove();
     })
+    .then((err) => {
+      popupAcceptionDeleteCard.close();
+    })
     .catch((err) => console.log(err));
-  popupAcceptionDeleteCard.close();
+  
 });
 popupAcceptionDeleteCard.setEventListeners();
 

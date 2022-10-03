@@ -32,7 +32,7 @@ const userInfo = new UserInfo({ name: profileName, profession: profileProfession
 function getInitialInfo() {
   const userInfo = apiController.getUserData();
   const cards = apiController.getInitialCards();
-  return Promise.all([userInfo, cards]);
+  return Promise.all([userInfo, cards]).catch((err) => console.log(err));
 }
 
 function cardsInitialization(cards) {

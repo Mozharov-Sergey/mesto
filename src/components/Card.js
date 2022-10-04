@@ -73,8 +73,8 @@ export default class Card {
     this._cardTitle.textContent = this._title;
     this._cardImage.alt = this._title;
 
-    if (this._userId !== this._cardOwnerId) {
-      this._deleteButton.classList.add('cards__delete-button_disabled');
+    if (this._userId === this._cardOwnerId) {
+      this._deleteButton.classList.add('cards__delete-button_active');
     }
 
     if (this._data.likes) {

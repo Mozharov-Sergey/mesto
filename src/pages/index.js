@@ -28,21 +28,25 @@ import { changeButtonText } from '../utils/utils.js';
 const apiController = new Api(apiOptions);
 const userInfo = new UserInfo({ name: profileName, profession: profileProfession }); // Данные из полей формы сразу обновляются в функции инициализации данных пользователя.
 
-/** ФУНКЦИИ ИНИЦИАЛИЗАЦИИ */
-function getInitialInfo() {
-  const userInfo = apiController.getUserData();
-  const cards = apiController.getInitialCards();
-  return Promise.all([userInfo, cards]).catch((err) => console.log(err));
-}
-
-function cardsInitialization(cards) {
-  cards // Только после того, как информация о пользователе получена ее можно передавать в карточки
-    .then((res) => {
-      const array = res[1].reverse(); // Разворачиваем массив, что бы новые карточки появлялись в начале.
+function start() {
+  return Promise.all([apiController.getUserData(), apiController.getInitialCards()])
+    .catch((err) => console.log(err))
+    .then(([user, cards]) => {
+      userInfo.setUserInfo({
+        name: user.name,
+        info: user.about,
+        id: user._id,
+        avatar: user.avatar,
+      });
+      avatar.style.backgroundImage = `url('${user.avatar}')`;
+      return [user, cards];
+    })
+    .catch((err) => console.log(err))
+    .then(([user, cards]) => {
+      const array = cards.reverse(); // Разворачиваем массив, что бы новые карточки появлялись в начале.
       return (cardList = new Section(
         {
           items: array,
-
           renderer: (item, container) => {
             const card = new Card(
               item,
@@ -61,25 +65,19 @@ function cardsInitialization(cards) {
               // ПРУФЫ: https://disk.yandex.ru/d/ELAgUpq70ZVb0A
 
               // handleLike
-              (cardId, like, button, counter) => {
-                apiController.likeCard(cardId).then((res) => {
-                  like(res.likes.length, button, counter);
-                  console.log(res.likes.length);
-                  console.log('like');
-                });
+              (cardId) => {
+                return apiController.likeCard(cardId);
               },
 
               // handleUnlike
-              (cardId, dislike, button, counter) => {
-                apiController.unlikeCard(cardId).then((res) => {
-                  dislike(res.likes.length, button, counter);
-                  console.log(res.likes.length);
-                  console.log('dislike');
-                });
+              (cardId) => {
+                return apiController.unlikeCard(cardId);
               },
 
               userInfo.getUserId()
+              
             ).generateCard();
+            
             container.prepend(card);
           },
         },
@@ -89,6 +87,7 @@ function cardsInitialization(cards) {
     .then((res) => res.addItems())
     .catch((err) => console.log(err));
 }
+
 
 function initializationFormValidation() {
   // Отказ от создания классов валидаторов в цикле в пользу именованых классов что бы иметь возможность вызвать buttonStateControl
@@ -101,23 +100,8 @@ function initializationFormValidation() {
   validators.validatorFormChangeAvatar.enableValidation();
 }
 
-function initialSettingUserInfo(userData) {
-  userData.then((res) => {
-    userInfo.setUserInfo({
-      name: res[0].name,
-      info: res[0].about,
-      id: res[0]._id,
-      avatar: res[0].avatar,
-    });
-    avatar.style.backgroundImage = `url('${res[0].avatar}')`;
-  })
-  .catch((err) => console.log(err));
-}
 
-/** ВЫЗОВЫ ФУНКЦИЙ ИНИЦИАЛИЗАЦИИ */
-const initialInfo = getInitialInfo();
-initialSettingUserInfo(initialInfo);
-cardsInitialization(initialInfo);
+start();
 initializationFormValidation();
 
 /** ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ */
@@ -169,13 +153,11 @@ const popupAddImageObject = new PopupWithForm(
   validators.validatorFormAddImage,
   (evt, inputValues) => {
     evt.preventDefault();
-    changeButtonText(buttonSubmitChangeUserData, 'Сохранение...');
+    changeButtonText(buttonSubmitNewCard, 'Сохранение...');
     apiController
       .addCard(inputValues.newCardLink, inputValues.newCardDescription)
       .then((res) => {
-        buttonSubmitNewCard.textContent = 'Сохранение...';
         cardList.addItem(res);
-        setTimeout(() => (buttonSubmitNewCard.textContent = 'Сохранить'), 3000);
       })
       .catch((err) => console.log(err))
       .then((res) => {
@@ -183,7 +165,7 @@ const popupAddImageObject = new PopupWithForm(
         validators.validatorFormAddImage.buttonStateControl();
       })
       .catch((err) => console.log(err))
-      .finally((res) => changeButtonText(buttonSubmitChangeUserData, 'Сохранить'));
+      .finally((res) => changeButtonText(buttonSubmitNewCard, 'Сохранить'));
   }
 );
 
@@ -198,7 +180,6 @@ const popupAcceptionDeleteCard = new PopupAcception('.popup_type_acception', (ca
       popupAcceptionDeleteCard.close();
     })
     .catch((err) => console.log(err));
-  
 });
 popupAcceptionDeleteCard.setEventListeners();
 

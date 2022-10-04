@@ -1,13 +1,5 @@
 export default class Card {
-  constructor(
-    data,
-    templateSelector,
-    handleCardClick,
-    handleRemoveCard,
-    handleLike,
-    handleUnlike,
-    userId
-  ) {
+  constructor(data, templateSelector, handleCardClick, handleRemoveCard, handleLike, handleUnlike, userId) {
     this._data = data;
     this._templateSelector = templateSelector;
     this._imageUrl = data.link;
@@ -24,30 +16,28 @@ export default class Card {
     this._handleUnlike = this._handleUnlike.bind(this);
     this._handleCardClick = handleCardClick;
     this._cardElement = this._getTemplate();
-    this._likeButton = this._cardElement.querySelector('.cards__like-button');
     this._deleteButton = this._cardElement.querySelector('.card__delete-button');
     this._cardImage = this._cardElement.querySelector('.cards__card-image');
     this._cardTitle = this._cardElement.querySelector('.cards__card-title');
     this._likesCounter = this._cardElement.querySelector('.cards__likes-counter');
+    this._likeButton = this._cardElement.querySelector('.cards__like-button');
     this._isLiked = this._checkIsLiked();
   }
 
   _checkIsLiked() {
     return this._data.likes.some((item) => {
-      
-      return (item._id === this._userId);
+      return item._id === this._userId;
     });
   }
 
-  like(numberOfLikes, button, counter) {
-    button.classList.add('cards__like-button_active');
-    counter.textContent = numberOfLikes;
-
+  like(numberOfLikes) {
+    this._likeButton.classList.add('cards__like-button_active');
+    this._likesCounter.textContent = numberOfLikes;
   }
 
-  dislike(numberOfLikes, button, counter) {
-    button.classList.remove('cards__like-button_active');
-    counter.textContent = numberOfLikes;
+  dislike(numberOfLikes) {
+    this._likeButton.classList.remove('cards__like-button_active');
+    this._likesCounter.textContent = numberOfLikes;
   }
 
   _getTemplate() {
@@ -62,14 +52,10 @@ export default class Card {
     this._likeButton.addEventListener('click', () => {
       if (this._isLiked) {
         this._isLiked = false;
-        this._handleUnlike(this._cardId, this.dislike, this._likeButton, this._likesCounter);
-        
-        
-
+        this._handleUnlike(this._cardId).then((res) => this.dislike(res.likes.length));
       } else {
         this._isLiked = true;
-        this._handleLike(this._cardId, this.like, this._likeButton, this._likesCounter);
-        
+        this._handleLike(this._cardId).then((res) => this.like(res.likes.length));
       }
     });
 

@@ -2,7 +2,7 @@ export default class FormValidator {
   constructor(config, form) {
     this.config = config;
     this._form = form;
-    this._submitButton = form.querySelector('.popup__submit-button');
+    this._submitButton = form.querySelector(this.config.submitButtonSelector);
     this.inputList = Array.from(form.querySelectorAll(this.config.inputSelector));
   }
 
